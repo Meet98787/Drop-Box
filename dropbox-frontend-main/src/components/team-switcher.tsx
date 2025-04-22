@@ -23,7 +23,7 @@ export function TeamSwitcher() {
                 <span className="truncate font-semibold">
                   Dropbox
                 </span>
-                <span className="truncate text-xs">SwiftRut</span>
+                <span className="truncate text-xs">Infero Infotech</span>
               </div>
             </SidebarMenuButton>
           
