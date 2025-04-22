@@ -82,41 +82,31 @@ const MessageModal: React.FC<MessageModalProps> = ({ message, isOpen, onClose })
         <div className="p-4 text-gray-700">{message.description}</div>
 
         {/* ✅ Display Attached Files */}
-        {message.files && message.files.length > 0 && (
-          <div className="p-4 border-t">
-            <h3 className="text-lg text-black font-semibold mb-2">Attached Files:</h3>
-            <div className="grid gap-3">
-              {message.files.map((file, index) => {
-                const fileName = file.filePath.split("/").pop() || `file-${index}`;
-
-                return (
-                  <div key={index} className="flex items-center gap-2 border rounded-md p-2 bg-gray-100">
-                    {/* ✅ Show Image Preview */}
-                    {isImage(file.filePath) ? (
-                      <div className="flex items-center gap-2">
-                        <img src={file.filePath} alt={`Attachment ${index + 1}`} className="w-16 h-16 rounded-md object-cover" />
-                        <a href={file.filePath} target="_blank" rel="noopener noreferrer">
-                          <Button variant="link" className="text-blue-600 flex items-center">
-                            <Eye className="w-4 h-4 mr-1" /> View Image
-                          </Button>
-                        </a>
-                      </div>
-                    ) : (
-                      // ✅ Download Button for ZIP, PDF, and other files
-                      <Button
-                        variant="link"
-                        className="flex items-center text-blue-600"
-                        onClick={() => handleDownload(message._id, file.filePath, fileName)}
-                      >
-                        <Download className="w-4 h-4 mr-1" /> Download {isZip(file.filePath) ? "ZIP" : isPDF(file.filePath) ? "PDF" : "File"}
-                      </Button>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
+        {message.files.map((file: { filePath: string; fileName?: string }, index: number) => {
+  const fileName = file.filePath.split("/").pop() || `file-${index}`;
+  return (
+    <div key={index} className="flex items-center gap-2 border rounded-md p-2 bg-gray-100">
+      {isImage(file.filePath) ? (
+        <div className="flex items-center gap-2">
+          <img src={file.filePath} alt={`Attachment ${index + 1}`} className="w-16 h-16 rounded-md object-cover" />
+          <a href={file.filePath} target="_blank" rel="noopener noreferrer">
+            <Button variant="link" className="text-blue-600 flex items-center">
+              <Eye className="w-4 h-4 mr-1" /> View Image
+            </Button>
+          </a>
+        </div>
+      ) : (
+        <Button
+  variant="link"
+  className="flex items-center text-blue-600"
+  onClick={() => handleDownload(message._id)}  // Only pass message._id
+>
+  <Download className="w-4 h-4 mr-1" /> Download {isZip(file.filePath) ? "ZIP" : isPDF(file.filePath) ? "PDF" : "File"}
+</Button>
+      )}
+    </div>
+  );
+})}
 
         <DialogFooter>
           <Button onClick={onClose} className="w-full bg-gray-800 text-white hover:bg-gray-700">
