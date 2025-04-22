@@ -10,7 +10,7 @@ const cors = require("cors");
 
 const app = express();
 const PORT = Config.PORT || 5000;
-const allowedOrigins = ["http://localhost:5173"];
+const allowedOrigins = ["https://drop-box-sooty.vercel.app/"];
 
 app.use(
   cors({
