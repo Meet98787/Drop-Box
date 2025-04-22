@@ -17,17 +17,15 @@ const MessageModal: React.FC<MessageModalProps> = ({ message, isOpen, onClose })
   const isZip = (fileUrl: string) => /\.(zip|rar|7z)$/i.test(fileUrl);
   const isPDF = (fileUrl: string) => /\.pdf$/i.test(fileUrl);
 
-  // ✅ Handle File Download via Backend
-  const handleDownload = async (messageId: string, filePath: string, fileName: string) => {
+  const handleDownload = async (messageId: string, fileName: string) => {
     try {
       console.log("Downloading file for Message ID:", messageId);
 
       const response = await apiClient.get(`/messages/download/${messageId}`, {
-        responseType: "blob", // ✅ Ensures binary data
+        responseType: "blob",
       });
 
-      // ✅ Extract filename from Content-Disposition header if available
-      let fileNameToUse = fileName || "downloaded-file"; // Use passed fileName if available
+      let fileNameToUse = fileName || "downloaded-file";
       const contentDisposition = response.headers["content-disposition"];
 
       if (contentDisposition) {
@@ -37,11 +35,9 @@ const MessageModal: React.FC<MessageModalProps> = ({ message, isOpen, onClose })
         }
       }
 
-      // ✅ Get MIME type based on file extension
       const fileExtension = fileNameToUse.split(".").pop()?.toLowerCase();
-      let mimeType = response.headers["content-type"] || "application/octet-stream"; // Default MIME type
+      let mimeType = response.headers["content-type"] || "application/octet-stream";
 
-      // ✅ Ensure correct file type handling
       if (fileExtension === "pdf") {
         mimeType = "application/pdf";
       } else if (["zip", "rar", "7z"].includes(fileExtension || "")) {
@@ -50,10 +46,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ message, isOpen, onClose })
 
       console.log(`Detected file type: ${mimeType}`);
 
-      // ✅ Create Blob with correct MIME type
       const blob = new Blob([response.data], { type: mimeType });
-
-      // ✅ Create download link
       const downloadLink = document.createElement("a");
       downloadLink.href = URL.createObjectURL(blob);
       downloadLink.download = fileNameToUse;
@@ -79,7 +72,6 @@ const MessageModal: React.FC<MessageModalProps> = ({ message, isOpen, onClose })
 
         <div className="p-4 text-gray-700">{message.description}</div>
 
-        {/* ✅ Display Attached Files */}
         {message.filePath && message.filePath.length > 0 && (
           <div className="p-4 border-t">
             <h3 className="text-lg text-black font-semibold mb-2">Attached Files:</h3>
@@ -89,7 +81,6 @@ const MessageModal: React.FC<MessageModalProps> = ({ message, isOpen, onClose })
 
                 return (
                   <div key={index} className="flex items-center gap-2 border rounded-md p-2 bg-gray-100">
-                    {/* ✅ Show Image Preview */}
                     {isImage(filePath) ? (
                       <div className="flex items-center gap-2">
                         <img src={filePath} alt={`Attachment ${index + 1}`} className="w-16 h-16 rounded-md object-cover" />
@@ -100,11 +91,10 @@ const MessageModal: React.FC<MessageModalProps> = ({ message, isOpen, onClose })
                         </a>
                       </div>
                     ) : (
-                      // ✅ Download Button for ZIP, PDF, and other files
                       <Button
                         variant="link"
                         className="flex items-center text-blue-600"
-                        onClick={() => handleDownload(message._id, filePath, fileName)} // Use filePath and fileName
+                        onClick={() => handleDownload(message._id, fileName)}
                       >
                         <Download className="w-4 h-4 mr-1" /> Download {isZip(filePath) ? "ZIP" : isPDF(filePath) ? "PDF" : "File"}
                       </Button>
