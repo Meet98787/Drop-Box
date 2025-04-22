@@ -104,7 +104,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ message, isOpen, onClose })
                       <Button
                         variant="link"
                         className="flex items-center text-blue-600"
-                        onClick={() => handleDownload(message._id, filePath, fileName)} // Pass the correct arguments
+                        onClick={() => handleDownload(message._id, filePath, fileName)} // Use filePath and fileName
                       >
                         <Download className="w-4 h-4 mr-1" /> Download {isZip(filePath) ? "ZIP" : isPDF(filePath) ? "PDF" : "File"}
                       </Button>
