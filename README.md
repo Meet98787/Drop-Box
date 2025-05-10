@@ -24,24 +24,22 @@ Make sure you have the following installed:
 ### Steps
 1. Clone this repository:
    ```bash
-   git clone https://github.com/meet98787/dropbox.git
+   git clone https://github.com/meet98787/Employee-Feedback-and-Complaint-Management-System.git
 
 2.Navigate to the project directory:
-```basu
+
   cd dropbox
 3.Install dependencies for both frontend and backend:
-```basu
-  cd client && npm install
-  cd ../server && npm install
+
+  cd dropbox-frontend-main && npm install
+  cd ../DropBox-Backend-main && npm install
 
 4.Set up environment variables:
 
 5.Start the backend server:
-```basu
-cd server
+cd DropBox-Backend-main
 npm run dev
 
 6.Start the frontend:
-```basu
-cd client
+cd dropbox-frontend-main
 npm start
